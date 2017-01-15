@@ -9,11 +9,11 @@ public class Main {
     public static void main(String[] argv) {
 
         System.out.println("\n[*] Test de readpgm");
-        int[][] image = SeamCarving.readpgm("ex1.pgm");
+        int[][] image = SeamCarving.readpgm("ex0.pgm");
         System.out.println("[I] Largeur : " + image[0].length);
         System.out.println("[I] Hauteur : " + image.length);
         System.out.println("\n[*] Test de write pgm, voir res/test.pgm");
-        SeamCarving.writepgm(image, "res/test.pgm");
+        SeamCarving.writepgm(image, "res/test0.pgm");
 
         System.out.println("\n[*] Test de interest");
         int[][] pix_interest = SeamCarving.interest(image);
@@ -23,7 +23,7 @@ public class Main {
 
         System.out.println("\n[*] Test de tograph");
         Graph g = SeamCarving.tograph(pix_interest);
-        System.out.println("\n[I] voir interest.dot");
-        g.writeFile("res/interest.dot");
+        System.out.println("\n[I] voir interest0.dot");
+        g.writeFile("res/interest0.dot");
     }
 }
