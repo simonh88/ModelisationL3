@@ -1,5 +1,9 @@
 package seamCarving;
 
+import seamCarving.graphe.Edge;
+import seamCarving.graphe.Graph;
+import seamCarving.graphe.GraphArrayList;
+
 import java.util.ArrayList;
 import java.io.*;
 import java.util.*;
@@ -105,6 +109,78 @@ public class SeamCarving
         }
 
         return res;
+    }
+
+    public static Graph tograph(int[][] itr) {
+        int height = itr.length;
+        int width = itr[0].length;
+
+        // Le constructeur prend le nombre de sommet en paramètre
+        // On ajoute deux pour le sommet de départ et d'arrivé
+        GraphArrayList g = new GraphArrayList((height * width) + 2);
+
+        // Pour chaque sommet, on créé une arête entre lui et ses trois 'descendants' si ils éxistent
+        // Le sommet représentant la case [i][j] à pour valeur i * largeur + largeur
+        // -> Pour éviter que deux sommets aient la même valeur
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+
+                // L'arête reliant un sommet à celui juste en dessous
+                if ((i+1) < height) {
+                    g.addEdge( new Edge(
+                            (i * width + j),
+                            ((i+1) * width + j),
+                            itr[i][j]
+                    ));
+                }
+
+                // L'arête reliant un sommet à celui en bas à gauche
+                if ((i+1) < height && (j-1) >= 0) {
+                    g.addEdge( new Edge(
+                            (i * width + j),
+                            ((i+1) * width + (j-1)),
+                            itr[i][j]
+                    ));
+                }
+
+                // L'arête reliant un sommet à celui en bas à droite
+                if ((i+1) < height && (j+1) < width) {
+                    g.addEdge( new Edge(
+                            (i * width + j),
+                            ((i+1) * width + (j+1)),
+                            itr[i][j]
+                    ));
+                }
+            }
+        }
+
+        // On relie les sommets du haut à un sommet qui servira de point de départ
+        // Etant donné que les sommets ont pour valeur i * largeur + j,
+        // les sommets du haut ont des valeurs allant de 0 à largeur - 1
+
+        // Le sommet de départ à pour valeur hauteur * largeur (en attendant de trouver mieux...)
+        // Le poid de ces arête est 0
+        int start = width * height;
+        for (int i = 0; i < width; i++) {
+            g.addEdge( new Edge(
+                    start,
+                    i,
+                    0
+            ));
+        }
+
+        // On relie les sommets du bas à un sommet qui servira de point d'arrivé
+        // Le sommet de départ à pour valeur hauteur * largeur + 1
+        int end = (width * height) + 1;
+        for (int i = 0; i < width; i++) {
+            g.addEdge( new Edge(
+                    (height-1)*width + i,
+                    end,
+                    itr[height-1][i]
+            ));
+        }
+
+        return g;
     }
    
 }

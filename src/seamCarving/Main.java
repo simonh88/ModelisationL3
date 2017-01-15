@@ -1,5 +1,8 @@
 package seamCarving;
 
+
+import seamCarving.graphe.Graph;
+
 import java.util.Arrays;
 
 public class Main {
@@ -17,5 +20,10 @@ public class Main {
         System.out.println("[I] ToString : " + Arrays.deepToString(pix_interest));
         System.out.println("[I] Largeur : " + pix_interest[0].length);
         System.out.println("[I] Hauteur : " + pix_interest.length);
+
+        System.out.println("\n[*] Test de tograph");
+        Graph g = SeamCarving.tograph(pix_interest);
+        System.out.println("\n[I] voir interest.dot");
+        g.writeFile("res/interest.dot");
     }
 }
