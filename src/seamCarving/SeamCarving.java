@@ -69,5 +69,42 @@ public class SeamCarving
 			t.printStackTrace(System.err) ;
 		}
 	}
+
+	public static int[][] interest(int[][] img) {
+        int height = img.length;
+        int width = img[0].length;
+        int[][] res = new int[height][width];
+        int interest_value = 0;
+
+        for (int i = 0; i < height; i++) {
+            for (int j = 0; j < width; j++) {
+                // 3 cas à traiter
+
+                // Le pixel a deux voisins
+                if ( (j-1) >= 0 && (j+1) < width) {
+                    // Moyenne des voisins
+                    int average = ( img[i][j-1] + img[i][j+1] ) / 2;
+                    // Valeur absolue de la différence entre la valeur du pixel et la moyenne de ses deux voisins
+                    interest_value = Math.abs(img[i][j] - average);
+                }
+
+                // Le pixel n'a qu'un voisin à droite
+                else if ( (j-1) < 0) {
+                    // Valeur absolue de la différence entre la valeur du pixel et celle de son voisin droit
+                    interest_value = Math.abs(img[i][j] - img[i][j+1]);
+                }
+
+                // Le pixel n'a qu'un voisin à gauche
+                else {
+                    // Valeur absolue de la différence entre la valeur du pixel et celle de son voisin gauche
+                    interest_value = Math.abs(img[i][j] - img[i][j-1]);
+                }
+
+                res[i][j] = interest_value;
+            }
+        }
+
+        return res;
+    }
    
 }
