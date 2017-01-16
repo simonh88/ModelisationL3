@@ -183,6 +183,8 @@ public class SeamCarving
     }
 
 
+    //DFS utilisé par le tritipo
+    //Ajoute le sommet à l'al une fois que tout ses "fils" sont visités
     static void dfs(Graph g, int u, boolean visite[], ArrayList<Integer> alChemin)
     {
         visite[u] = true;
@@ -190,16 +192,32 @@ public class SeamCarving
         for (Edge e: g.next(u))
             if (!visite[e.getTo()])
                 dfs(g,e.getTo(), visite, alChemin);
+        //Ajout du sommet au chemin
         alChemin.add(u);
     }
 
+    //Parcours ordre suffixe dfs et retourne le reverse du tableau
+    //du graphe g passé en paramètres
     public static ArrayList<Integer> tritipo(Graph g){
-        int n = g.vertices();
+        int n = g.vertices(); //On récupère le nombre de sommets du graphe
         boolean[] visite = new boolean[n*n+2];
         ArrayList<Integer> alChemin = new ArrayList<>(n);
+        //On lance dfs sur le premier sommet 0
         dfs(g, 0, visite, alChemin);
         Collections.reverse(alChemin);
         return alChemin;
+    }
+
+    /**
+     *
+     * @param g le graph à étudier
+     * @param s Le sommet d'ou part l'algo bellman
+     * @param t Le sommet d'arrivée
+     * @param order Un tri topologique du graphe
+     * @return Le chemin du coût minimal ( la liste des sommets à parcourir )
+     */
+    public static ArrayList<Integer> Bellman(Graph g, int s, int t, ArrayList<Integer> order){
+
     }
    
 }
