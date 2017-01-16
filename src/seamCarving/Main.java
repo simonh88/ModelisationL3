@@ -1,11 +1,32 @@
 package seamCarving;
 
 
+import seamCarving.graphe.Edge;
 import seamCarving.graphe.Graph;
+import seamCarving.graphe.GraphArrayList;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
+
+    private static void test_question4(){
+        GraphArrayList g = new GraphArrayList(6);
+        g.addEdge(new Edge(0, 1, 1));
+        g.addEdge(new Edge(0, 2, 1));
+        g.addEdge(new Edge(0, 3, 1));
+        g.addEdge(new Edge(1, 4, 1));
+        g.addEdge(new Edge(4, 3, 1));
+        g.addEdge(new Edge(3, 5, 1));
+        g.addEdge(new Edge(5, 1, 1));
+
+        ArrayList<Integer> res = SeamCarving.tritipo(g);
+        for (Integer re : res) {
+            System.out.println(re);
+        }
+    }
+
+
     public static void main(String[] argv) {
 
         System.out.println("\n[*] Test de readpgm");
@@ -25,5 +46,8 @@ public class Main {
         Graph g = SeamCarving.tograph(pix_interest);
         System.out.println("\n[I] voir interest0.dot");
         g.writeFile("res/interest0.dot");
+
+        System.out.println("TEST DE LA QUESTION 4 : ");
+        test_question4();
     }
 }

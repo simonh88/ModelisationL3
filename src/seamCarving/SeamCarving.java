@@ -9,7 +9,6 @@ import java.io.*;
 import java.util.*;
 public class SeamCarving
 {
-
    public static int[][] readpgm(String fn)
 	 {		
         try {
@@ -181,6 +180,26 @@ public class SeamCarving
         }
 
         return g;
+    }
+
+
+    static void dfs(Graph g, int u, boolean visite[], ArrayList<Integer> alChemin)
+    {
+        visite[u] = true;
+        System.out.println("Je visite " + u);
+        for (Edge e: g.next(u))
+            if (!visite[e.getTo()])
+                dfs(g,e.getTo(), visite, alChemin);
+        alChemin.add(u);
+    }
+
+    public static ArrayList<Integer> tritipo(Graph g){
+        int n = g.vertices();
+        boolean[] visite = new boolean[n*n+2];
+        ArrayList<Integer> alChemin = new ArrayList<>(n);
+        dfs(g, 0, visite, alChemin);
+        Collections.reverse(alChemin);
+        return alChemin;
     }
    
 }
