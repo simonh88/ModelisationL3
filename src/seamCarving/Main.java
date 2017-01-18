@@ -41,7 +41,7 @@ public class Main {
 
     public static void main(String[] argv) {
 
-        int[][] res = SeamCarving.reduce_width("ex1.pgm", 1);
+        int[][] res = SeamCarving.reduce_width("ex1.pgm", 30);
         SeamCarving.writepgm(res, "res/testreduce.pgm");
     }
 }

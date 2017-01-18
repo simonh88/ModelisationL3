@@ -196,7 +196,10 @@ public class SeamCarving {
     //du graphe g passé en paramètres
     public static ArrayList<Integer> tritopo(Graph g) {
         int n = g.vertices(); //On récupère le nombre de sommets du graphe
-        boolean[] visite = new boolean[n * n + 2];
+        System.out.println("n : " + n);
+        System.out.println("n*n+2 : " + n*n+2);
+        long nb_vertices = n*n+2;
+        boolean[] visite = new boolean[nb_vertices];
         ArrayList<Integer> alChemin = new ArrayList<>(n);
         //On lance dfs sur le premier sommet 0
         dfs(g, 0, visite, alChemin);
@@ -274,7 +277,7 @@ public class SeamCarving {
             int j_res = 0;
             int j_src = 0;
             while ( j_res < res[0].length) {
-                if (res_bellman.contains(img[j_src][i])) {
+                if (res_bellman.contains(img[i][j_src])) {
                     j_src++;
                 }
                 res[i][j_res] = img[i][j_src];
@@ -293,14 +296,12 @@ public class SeamCarving {
 
         int[][] res = image;
         for (int i = 0; i < nb_pixel; i++) {
-            System.out.println("Taille au début de la boucle " + res.length + "/" + res[0].length);
             int[][] pix_interest = SeamCarving.interest(res);
             Graph g = SeamCarving.tograph(pix_interest);
             ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height*width, height*width+1, tritopo);
             res = del_pixel_column(res, ppc);
-            System.out.println("Taille à la fin de la boucle " + res.length + "/" + res[0].length);
         }
 
         return res;
