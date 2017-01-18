@@ -225,33 +225,28 @@ public class SeamCarving {
         //L'initialisation à 0 est déjà faite avec le new qui met des 0 et le fill qui met des -1
 
         //On parcours order qui contient l'ordre du tri topo
-        for(int i = 1; i<order.size(); i++){
+        for (int i = 1; i < order.size(); i++) {
             point = order.get(i);
             //On recherche toute les arêtes qui mènent au point étudié et on recherche le coût minimal
-            for(int j = 0; j<i; j++){
-                //On recherche si une arête arrive sur le point qui nous intéresse
-                for (Edge e : g.next(order.get(j))){
-                    if(e.getTo() == point){//Arête qui mène au point qui nous intéresse
-                        if(dist[point] > dist[e.getFrom()]+e.getCost()){//Si on entre c'est qu'on a trouvé plus petit
-                            //On actualise nos tableaux
-                            dist[point] = dist[e.getFrom()]+e.getCost();
-                            parents[point] = e.getFrom();
-                        }
-                    }
+            //On parcours les arêtes qui mènent à notre point
+            for (Edge e : g.prev(point)) {
+                if (dist[point] > dist[e.getFrom()] + e.getCost()) {//Si on entre c'est qu'on a trouvé plus petit
+                    //On actualise nos tableaux
+                    dist[point] = dist[e.getFrom()] + e.getCost();
+                    parents[point] = e.getFrom();
                 }
             }
-
         }
         //Arraylist de réponses
         ArrayList<Integer> rep = new ArrayList<>(g.vertices());
 
         //On ajoute le point d'arriver en premier
-        rep.add(order.get(order.size()-1));
+        rep.add(order.get(order.size() - 1));
 
         //Initialisation pour retrouver le CCM
-        Integer parcours = parents[g.vertices()-1];
+        Integer parcours = parents[g.vertices() - 1];
         //On parcours le tableau des parents pour retrouver le CCM
-        while(parcours != -1){
+        while (parcours != -1) {
             rep.add(parcours);
             parcours = parents[parcours];
         }
