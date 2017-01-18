@@ -317,9 +317,9 @@ public class SeamCarving {
             ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
-            /*for(Integer pix : ppc){
+            for(Integer pix : ppc){
                 System.out.println("ppc : "+pix);
-            }*/
+            }
             res = del_pixel_column(res, ppc);
         }
 
