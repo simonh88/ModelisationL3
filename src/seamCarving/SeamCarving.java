@@ -278,11 +278,6 @@ public class SeamCarving {
 
         // La nouvelle image a un pixel de moins en largeur
         int[][] res = new int[img.length][img[0].length - 1];
-        for(int[] i: img){
-            for(int j: i){
-                //System.out.println("j : "+j);
-            }
-        }
 
         // On itère sur les deux tableaux en même temps.
         // Pour itérer sur les lignes, on utilise deux variables différentes
@@ -291,10 +286,9 @@ public class SeamCarving {
             int j_res = 0;
             int j_src = 0;
             while (j_res < res[0].length) {
-                //System.out.println("img : "+ img[i][j_src] +"Je suis au pixel n° :"+i+j_src);
-                if (res_bellman.contains(i+j_res)) {
+                if (res_bellman.contains(i*img[0].length+j_src)) {
+                    int v = i*img.length+j_src;
                     j_src++;
-                    //System.out.println("trouve");
                 }
                 res[i][j_res] = img[i][j_src];
                 j_res++;
@@ -317,9 +311,6 @@ public class SeamCarving {
             ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
-            for(Integer pix : ppc){
-                System.out.println("ppc : "+pix);
-            }
             res = del_pixel_column(res, ppc);
         }
 
