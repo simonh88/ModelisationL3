@@ -196,10 +196,7 @@ public class SeamCarving {
     //du graphe g passé en paramètres
     public static ArrayList<Integer> tritopo(Graph g) {
         int n = g.vertices(); //On récupère le nombre de sommets du graphe
-        System.out.println("n : " + n);
-        System.out.println("n*n+2 : " + n*n+2);
-        long nb_vertices = n*n+2;
-        boolean[] visite = new boolean[nb_vertices];
+        boolean[] visite = new boolean[n];
         ArrayList<Integer> alChemin = new ArrayList<>(n);
         //On lance dfs sur le premier sommet 0
         dfs(g, 0, visite, alChemin);
