@@ -41,7 +41,10 @@ public class Main {
 
     public static void main(String[] argv) {
 
-        int[][] res = SeamCarving.reduce_width("ex1.pgm", 30);
+        int [][] interest = SeamCarving.interest(SeamCarving.readpgm("ex0.pgm"));
+        Graph g = SeamCarving.tograph(interest);
+        g.writeFile("res/interest0.dot");
+        int[][] res = SeamCarving.reduce_width("ex0.pgm", 2);
         SeamCarving.writepgm(res, "res/testreduce.pgm");
     }
 }
