@@ -18,7 +18,8 @@ public class Main {
         g = new GraphArrayList(6);
         g.addEdge(new Edge(0, 1, 1));
         g.addEdge(new Edge(0, 2, 1));
-        g.addEdge(new Edge(0, 3, 1));
+        g.addEdge(new Edge(2, 5, -6));
+        g.addEdge(new Edge(0, 3, -4));
         g.addEdge(new Edge(1, 4, 1));
         g.addEdge(new Edge(4, 3, 1));
         g.addEdge(new Edge(3, 5, 1));
@@ -46,5 +47,6 @@ public class Main {
         g.writeFile("res/interest0.dot");
         int[][] res = SeamCarving.reduce_width("ex0.pgm", 2);
         SeamCarving.writepgm(res, "res/testreduce.pgm");
+
     }
 }
