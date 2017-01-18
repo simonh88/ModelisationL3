@@ -35,4 +35,8 @@ public class Edge
 	public void setCost(int cost) {
 		this.cost = cost;
 	}
+
+	public String toString() {
+   	return "to: " + to + " | from: " + from + " | cost: " + cost;
+	}
 }

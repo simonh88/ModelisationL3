@@ -185,7 +185,6 @@ public class SeamCarving {
     //Ajoute le sommet à l'al une fois que tout ses "fils" sont visités
     static void dfs(Graph g, int u, boolean visite[], ArrayList<Integer> alChemin) {
         visite[u] = true;
-        System.out.println("Je visite " + u);
         for (Edge e : g.next(u))
             if (!visite[e.getTo()])
                 dfs(g, e.getTo(), visite, alChemin);
@@ -260,6 +259,56 @@ public class SeamCarving {
         Collections.reverse(rep);
 
         return rep;
+    }
+
+    /***
+     * Supprime un 'colonne' de pixel, ceux présent dans le plus cour chemin calculé
+     * @param img l'image source
+     * @param res_bellman le plus court chemin
+     * @return l'image avec une colonne de pixel en moi
+     */
+    public static int[][] del_pixel_column(int[][] img, ArrayList<Integer> res_bellman) {
+
+        // La nouvelle image a un pixel de moins en largeur
+        int[][] res = new int[img.length][img[0].length-1];
+
+        // On itère sur les deux tableaux en même temps.
+        // Pour itérer sur les lignes, on utilise deux variables différentes
+        // Si le pixel courant est dans le chemin le plus court, on incrémente une seule des deux variables
+        for (int i = 0; i < img.length; i++) {
+            int j_res = 0;
+            int j_src = 0;
+            while ( j_res < res[0].length) {
+                if (res_bellman.contains(img[j_src][i])) {
+                    j_src++;
+                }
+                res[i][j_res] = img[i][j_src];
+                j_res++;
+                j_src++;
+            }
+        }
+
+        return res;
+    }
+
+    public static int[][] reduce_width(String filename, int nb_pixel) {
+        int[][] image = SeamCarving.readpgm(filename);
+        int height = image.length;
+        int width = image[0].length;
+
+        int[][] res = image;
+        for (int i = 0; i < nb_pixel; i++) {
+            System.out.println("Taille au début de la boucle " + res.length + "/" + res[0].length);
+            int[][] pix_interest = SeamCarving.interest(res);
+            Graph g = SeamCarving.tograph(pix_interest);
+            ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
+
+            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height*width, height*width+1, tritopo);
+            res = del_pixel_column(res, ppc);
+            System.out.println("Taille à la fin de la boucle " + res.length + "/" + res[0].length);
+        }
+
+        return res;
     }
 
 }
