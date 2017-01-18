@@ -30,6 +30,7 @@ public class SeamCarving {
             int count = 0;
             while (count < height * width) {
                 im[count / width][count % width] = s.nextInt();
+                //System.out.println("J'ajoute : "+im[count / width][count % width]);
                 count++;
             }
             return im;
@@ -185,9 +186,11 @@ public class SeamCarving {
     //Ajoute le sommet à l'al une fois que tout ses "fils" sont visités
     static void dfs(Graph g, int u, boolean visite[], ArrayList<Integer> alChemin) {
         visite[u] = true;
-        for (Edge e : g.next(u))
-            if (!visite[e.getTo()])
+        for (Edge e : g.next(u)) {
+            if (!visite[e.getTo()]) {
                 dfs(g, e.getTo(), visite, alChemin);
+            }
+        }
         //Ajout du sommet au chemin
         alChemin.add(u);
     }
@@ -199,7 +202,7 @@ public class SeamCarving {
         boolean[] visite = new boolean[n];
         ArrayList<Integer> alChemin = new ArrayList<>(n);
         //On lance dfs sur le premier sommet 0
-        dfs(g, 0, visite, alChemin);
+        dfs(g, g.vertices()-2, visite, alChemin);
         Collections.reverse(alChemin);
         return alChemin;
     }
@@ -214,7 +217,9 @@ public class SeamCarving {
     public static ArrayList<Integer> Bellman(Graph g, int s, int t, ArrayList<Integer> order) {
         //Tableau contenant les distances de s au noeud
         Integer[] dist = new Integer[g.vertices()];
-        Arrays.fill(dist, Integer.MAX_VALUE-100000);
+        Arrays.fill(dist, Integer.MAX_VALUE - 100000);
+        dist[order.get(0)] = 0;
+        //System.out.println("JE MET A ZERO : "+order.get(0));
         //Tableau qui contient les parents pendant le parcours
         Integer[] parents = new Integer[g.vertices()];
         //On rempli le tableau avec -1 (pas de sommet s'appelant -1)
@@ -222,16 +227,22 @@ public class SeamCarving {
 
         Integer point;
 
+
         //L'initialisation à 0 est déjà faite avec le new qui met des 0 et le fill qui met des -1
 
         //On parcours order qui contient l'ordre du tri topo
-        for (int i = 1; i < order.size(); i++) {
+        for (int i = 0; i < order.size(); i++) {
             point = order.get(i);
+            //System.out.println("Je m'interesse au point : "+order.get(i));
             //On recherche toute les arêtes qui mènent au point étudié et on recherche le coût minimal
             //On parcours les arêtes qui mènent à notre point
             for (Edge e : g.prev(point)) {
-                if (dist[point] > dist[e.getFrom()] + e.getCost()) {//Si on entre c'est qu'on a trouvé plus petit
+                //System.out.println("Je regarde : "+e.getFrom()+" qui va vers : "+e.getTo());
+                int a = dist[e.getFrom()] + e.getCost();
+                //System.out.println("Valeur du point : "+dist[point] + " et valeur du + : "+a);
+                if (dist[point] >= dist[e.getFrom()] + e.getCost()) {//Si on entre c'est qu'on a trouvé plus petit
                     //On actualise nos tableaux
+                    //System.out.println("JE CHANGE");
                     dist[point] = dist[e.getFrom()] + e.getCost();
                     parents[point] = e.getFrom();
                 }
@@ -241,7 +252,7 @@ public class SeamCarving {
         ArrayList<Integer> rep = new ArrayList<>(g.vertices());
 
         //On ajoute le point d'arriver en premier
-        rep.add(order.get(order.size() - 1));
+        //rep.add(order.get(order.size() - 1));
 
         //Initialisation pour retrouver le CCM
         Integer parcours = parents[g.vertices() - 1];
@@ -250,6 +261,7 @@ public class SeamCarving {
             rep.add(parcours);
             parcours = parents[parcours];
         }
+        rep.remove(rep.size()-1);//On enleve le dernier point factice
         //On retourne le tableau pour avoir le bon sens du chemin
         Collections.reverse(rep);
 
@@ -265,7 +277,12 @@ public class SeamCarving {
     public static int[][] del_pixel_column(int[][] img, ArrayList<Integer> res_bellman) {
 
         // La nouvelle image a un pixel de moins en largeur
-        int[][] res = new int[img.length][img[0].length-1];
+        int[][] res = new int[img.length][img[0].length - 1];
+        for(int[] i: img){
+            for(int j: i){
+                //System.out.println("j : "+j);
+            }
+        }
 
         // On itère sur les deux tableaux en même temps.
         // Pour itérer sur les lignes, on utilise deux variables différentes
@@ -273,9 +290,11 @@ public class SeamCarving {
         for (int i = 0; i < img.length; i++) {
             int j_res = 0;
             int j_src = 0;
-            while ( j_res < res[0].length) {
-                if (res_bellman.contains(img[i][j_src])) {
+            while (j_res < res[0].length) {
+                //System.out.println("img : "+ img[i][j_src] +"Je suis au pixel n° :"+i+j_src);
+                if (res_bellman.contains(i+j_res)) {
                     j_src++;
+                    //System.out.println("trouve");
                 }
                 res[i][j_res] = img[i][j_src];
                 j_res++;
@@ -297,7 +316,10 @@ public class SeamCarving {
             Graph g = SeamCarving.tograph(pix_interest);
             ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
 
-            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height*width, height*width+1, tritopo);
+            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
+            /*for(Integer pix : ppc){
+                System.out.println("ppc : "+pix);
+            }*/
             res = del_pixel_column(res, ppc);
         }
 

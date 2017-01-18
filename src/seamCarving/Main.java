@@ -45,7 +45,16 @@ public class Main {
         int [][] interest = SeamCarving.interest(SeamCarving.readpgm("ex0.pgm"));
         Graph g = SeamCarving.tograph(interest);
         g.writeFile("res/interest0.dot");
-        int[][] res = SeamCarving.reduce_width("ex0.pgm", 2);
+        ArrayList<Integer> altopo = SeamCarving.tritopo(g);
+        //System.out.println(altopo.size());
+        /*for(Integer sommet : altopo){
+            System.out.println("tri topo : "+sommet);
+        }
+        ArrayList<Integer> al = SeamCarving.Bellman(g,0,0,altopo);
+        for(Integer sommet : al){
+            System.out.println("bellman : "+sommet);
+        }*/
+        int[][] res = SeamCarving.reduce_width("ex1.pgm", 50);
         SeamCarving.writepgm(res, "res/testreduce.pgm");
 
     }
