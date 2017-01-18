@@ -214,7 +214,7 @@ public class SeamCarving {
     public static ArrayList<Integer> Bellman(Graph g, int s, int t, ArrayList<Integer> order) {
         //Tableau contenant les distances de s au noeud
         Integer[] dist = new Integer[g.vertices()];
-        Arrays.fill(dist, Integer.MAX_VALUE);
+        Arrays.fill(dist, Integer.MAX_VALUE-100000);
         //Tableau qui contient les parents pendant le parcours
         Integer[] parents = new Integer[g.vertices()];
         //On rempli le tableau avec -1 (pas de sommet s'appelant -1)

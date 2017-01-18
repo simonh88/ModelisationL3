@@ -18,7 +18,8 @@ public class Main {
         g = new GraphArrayList(6);
         g.addEdge(new Edge(0, 1, 1));
         g.addEdge(new Edge(0, 2, 1));
-        g.addEdge(new Edge(0, 3, 1));
+        g.addEdge(new Edge(2, 5, -6));
+        g.addEdge(new Edge(0, 3, -4));
         g.addEdge(new Edge(1, 4, 1));
         g.addEdge(new Edge(4, 3, 1));
         g.addEdge(new Edge(3, 5, 1));
@@ -41,7 +42,9 @@ public class Main {
 
     public static void main(String[] argv) {
 
-        int[][] res = SeamCarving.reduce_width("ex1.pgm", 30);
-        SeamCarving.writepgm(res, "res/testreduce.pgm");
+        //test_question4();
+        //test_question5();
+        int[][] res = SeamCarving.reduce_width("ex2.pgm", 50);
+        SeamCarving.writepgm(res, "res/testreduce2.2.pgm");
     }
 }
