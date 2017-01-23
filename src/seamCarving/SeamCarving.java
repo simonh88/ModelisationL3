@@ -177,9 +177,9 @@ public class SeamCarving {
                     itr[height - 1][i]
             ));
         }
-
         return g;
     }
+
 
 
     //DFS utilisé par le tritipo

@@ -54,7 +54,7 @@ public class Main {
         for(Integer sommet : al){
             System.out.println("bellman : "+sommet);
         }*/
-        int[][] res = SeamCarving.reduce_width("ex2.pgm", 100);
+        int[][] res = SeamCarving.reduce_width("ex3.pgm", 50);
         SeamCarving.writepgm(res, "res/testreduce.pgm");
 
     }
