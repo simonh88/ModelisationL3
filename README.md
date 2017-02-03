@@ -1,8 +1,15 @@
 # ModelisationL3
 Projet L3 modélisation (Travail sur les images, réduction d'images en supprimant pixels)
 
-# Ce qui est fait
-* Q1 : La fonction writepgm : écrite et testée (vite fait mais ça à l'air de marcher mdr)
-* Q2 : La fonction interest : écrite mais pas vraiment testée 
-* Q3 : La fonction tograph : écrite mais dans l'attente de pouvoir visualiser le graph ce qui faciliterai les tests de interest et tograph. Normalement, pour exporter les .dot présent dans res/ en png, tu fais dot -Tpng interest.dot -o interest.png après avoir installer graphviz, il doit y avoir un package tout prêt. Mais perso dot segfault sur os x et arch linux :(
+# Informations
+* Le jar est dans le dossier jar/
+* Les sources dans src/
+* Les images de test et les images de test réduites sont dans res/
 
+# Répartition du travail
+* Guillaume : writepgm, interest, tograph, reduce_width
+* Simon : DFS, tritopo, Bellman, del_pix_column
+
+
+# Usage
+java -jar seamcarving.jar <pgm source> <pgm destination> <nombre d'itération>
