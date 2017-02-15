@@ -107,13 +107,25 @@ class DFS {
 
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
+
+        // On push le sommet de départ
         stack.push(s);
+
+        // Tant que la pile n'est pas vide
         while (!stack.empty()) {
+
+            // On pop un sommet de la pile
             int u = stack.pop();
+
+            // Si il n'a pas été visité
             if (!visited[u]) {
+                // Alors on le visite
+
                 visited[u] = true;
                 //System.out.println(u);
                 res.add(u);
+
+                // Et on ajoute tous ces fils à la pile
                 for (Edge e : g.next(u))
                     if (!visited[e.to])
                         stack.push(e.to);
@@ -137,21 +149,26 @@ class DFS {
     public static void botched_dfs4(Graph g, int s) {
         // Pour stocker le résultat
         ArrayList<Integer> res = new ArrayList<>();
+
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
+
+        // On push et on visite le premier sommet
         stack.push(s);
         visited[s] = true;
         //System.out.println(s);
         res.add(s);
+
+        // Tant que la stack n'est pas vide
         while (!stack.empty()) {
             boolean end = true;
-        /* (a) Soit u le sommet en haut de la pile */
-        /* (b) Si u a un voisin non visité, alors */
-        /*     (c) on le visite et on l'ajoute sur la pile */
-        /* Sinon */
-        /*     (d) on enlève u de la pile */
-	   
-	    /* (a) */
+                /* (a) Soit u le sommet en haut de la pile */
+                /* (b) Si u a un voisin non visité, alors */
+                /* (c)   on le visite et on l'ajoute sur la pile */
+                /* Sinon */
+                /*     (d) on enlève u de la pile */
+
+                /* (a) */
             int u = stack.peek();
             for (Edge e : g.next(u))
                 if (!visited[e.to]) /* (b) */ {
@@ -165,7 +182,9 @@ class DFS {
             if (end) /*(d)*/
                 stack.pop();
         }
-        //System.out.println(stack.capacity());
+
+        // Affichage capacité et résultat
+        System.out.println("Capacité : " + stack.capacity());
         System.out.print("\nRésultat : ");
         for (Integer i : res) {
             System.out.printf("%d ", i);
