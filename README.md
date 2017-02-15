@@ -22,8 +22,11 @@ java -jar seamcarving.jar <pgm source> <pgm destination> <nombre d'itération>
 
 # Partie 2
 * Pourquoi DFS 1 ne marche pas ? : (L'ordre des visites = parcours en largeur)
-Ordre des pops : Au lieu d'aller au plus profond on sauvegarde sur la pile les sommets visités pour visiter les fils plus tard
+Ordre des affichages : Au lieu d'aller au plus profond on sauvegarde sur la pile les sommets visités pour visiter les fils plus tard
 
-* Pourquoi DFS 2 ne marche pas ? :
-* Pourquoi la pile est trop grande avec DFS 3 ? :
+* Pourquoi DFS 2 ne marche pas ? : (L'ordre des visites = parcours en largeur come DFS 1)
+Ordre des affichages = ordre des visites = la fonction réalise un parcour en largeur
+
+
+* Pourquoi la pile est trop grande avec DFS 3 ? : 
 * Pourquoi le temps d'éxécution est trop grand avec DFS 4 ? :

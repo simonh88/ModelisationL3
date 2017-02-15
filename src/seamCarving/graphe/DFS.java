@@ -43,7 +43,7 @@ class DFS {
                 }
         }
 
-        System.out.print("Résultat : ");
+        System.out.print("\nRésultat : ");
         for (Integer i : res) {
             System.out.printf("%d ", i);
         }
@@ -51,28 +51,60 @@ class DFS {
     }
 
     /**
-     *
+     * La principale différence avec DFS 1 : le println n'est plus placé avant l'itération sur les arrêtes
+     * -> il est placé au niveau du push/visite (du coup c'est une fonction qui semble faire un parcour en largeur)
      * @param g le graph
      * @param s le sommet de départ
      */
     public static void botched_dfs2(Graph g, int s) {
+        // Pour stocker le résultat
+        ArrayList<Integer> res = new ArrayList<>();
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
+
+        System.out.printf("On push/visite %d\n", s);
         stack.push(s);
-        System.out.println(s);
+        //System.out.println(s);
+        res.add(s);
         visited[s] = true;
+
+        // Tant que la stack n'est pas vide
         while (!stack.empty()) {
+
+            // On pop un sommet de la stack
             int u = stack.pop();
+
+            // Pour chaque arrête issue de ce sommet
             for (Edge e : g.next(u))
+
+                // Si nous n'avons pas visité le sommet pointé par cette arrête
                 if (!visited[e.to]) {
-                    System.out.println(e.to);
+                    // Alors on le visite et on le push (pour visiter ses fils plus tard ?)
+                    //System.out.println(e.to);
+                    res.add(e.to);
+                    System.out.printf("On push/visite %d\n", e.to);
                     visited[e.to] = true;
                     stack.push(e.to);
                 }
         }
+
+        System.out.print("\nRésultat : ");
+        for (Integer i : res) {
+            System.out.printf("%d ", i);
+        }
+        System.out.println("");
     }
 
+
+    /**
+     *
+     * @param g le graph
+     * @param s le sommet de départ
+     */
     public static void botched_dfs3(Graph g, int s) {
+        // Pour stocker le résultat
+        ArrayList<Integer> res = new ArrayList<>();
+
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
         stack.push(s);
@@ -80,22 +112,37 @@ class DFS {
             int u = stack.pop();
             if (!visited[u]) {
                 visited[u] = true;
-                System.out.println(u);
+                //System.out.println(u);
+                res.add(u);
                 for (Edge e : g.next(u))
                     if (!visited[e.to])
                         stack.push(e.to);
 
             }
         }
+
+        System.out.print("\nRésultat : ");
+        for (Integer i : res) {
+            System.out.printf("%d ", i);
+        }
+        System.out.println("");
     }
 
 
+    /**
+     *
+     * @param g le graphe
+     * @param s le sommet de départ
+     */
     public static void botched_dfs4(Graph g, int s) {
+        // Pour stocker le résultat
+        ArrayList<Integer> res = new ArrayList<>();
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
         stack.push(s);
         visited[s] = true;
-        System.out.println(s);
+        //System.out.println(s);
+        res.add(s);
         while (!stack.empty()) {
             boolean end = true;
         /* (a) Soit u le sommet en haut de la pile */
@@ -109,7 +156,8 @@ class DFS {
             for (Edge e : g.next(u))
                 if (!visited[e.to]) /* (b) */ {
                     visited[e.to] = true;
-                    System.out.println(e.to);
+                    //System.out.println(e.to);
+                    res.add(e.to);
                     stack.push(e.to); /*(c) */
                     end = false;
                     break;
@@ -117,7 +165,12 @@ class DFS {
             if (end) /*(d)*/
                 stack.pop();
         }
-        System.out.println(stack.capacity());
+        //System.out.println(stack.capacity());
+        System.out.print("\nRésultat : ");
+        for (Integer i : res) {
+            System.out.printf("%d ", i);
+        }
+        System.out.println("");
     }
 
 
