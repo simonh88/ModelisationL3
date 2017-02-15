@@ -21,7 +21,9 @@ Projet L3 modélisation (Travail sur les images, réduction d'images en supprima
 java -jar seamcarving.jar <pgm source> <pgm destination> <nombre d'itération>
 
 # Partie 2
-* Pourquoi DFS 1 ne marche pas ? : 
+* Pourquoi DFS 1 ne marche pas ? : (L'ordre des visites = parcours en largeur)
+Ordre des pops : Au lieu d'aller au plus profond on sauvegarde sur la pile les sommets visités pour visiter les fils plus tard
+
 * Pourquoi DFS 2 ne marche pas ? :
 * Pourquoi la pile est trop grande avec DFS 3 ? :
 * Pourquoi le temps d'éxécution est trop grand avec DFS 4 ? :

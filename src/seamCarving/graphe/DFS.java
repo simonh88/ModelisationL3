@@ -1,5 +1,6 @@
 package seamCarving.graphe;
 
+import java.util.ArrayList;
 import java.util.Stack;
 
 class DFS {
@@ -10,11 +11,13 @@ class DFS {
      * @param s le sommet de départ
      */
     public static void botched_dfs1(Graph g, int s) {
+        ArrayList<Integer> res = new ArrayList<>();
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
 
         // On push le premier sommet
         stack.push(s);
+        System.out.printf("On push/visite %d\n", s);
         // ON dit qu'on l'a visité
         visited[s] = true;
 
@@ -24,19 +27,34 @@ class DFS {
             // On prend le sommet de la pile
             int u = stack.pop();
 
-            System.out.println(u);
+            //System.out.println(u);
+            res.add(u);
 
             // Pour chaque arrête issues de ce sommet
             for (Edge e : g.next(u))
                 // Si on n'a pas visité le sommet où pointe cette arrête
+
+                // En gros : pour chaque sommet fils, on le visite et le le push pour visiter ses fils plus tard
                 if (!visited[e.to]) {
                     // On visite ce sommet et on le push
                     visited[e.to] = true;
                     stack.push(e.to);
+                    System.out.printf("On push/visite %d\n", e.to);
                 }
         }
+
+        System.out.print("Résultat : ");
+        for (Integer i : res) {
+            System.out.printf("%d ", i);
+        }
+        System.out.println("");
     }
 
+    /**
+     *
+     * @param g le graph
+     * @param s le sommet de départ
+     */
     public static void botched_dfs2(Graph g, int s) {
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
