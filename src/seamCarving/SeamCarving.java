@@ -30,7 +30,6 @@ public class SeamCarving {
             int count = 0;
             while (count < height * width) {
                 im[count / width][count % width] = s.nextInt();
-                //System.out.println("J'ajoute : "+im[count / width][count % width]);
                 count++;
             }
             return im;
@@ -57,8 +56,6 @@ public class SeamCarving {
 
             while (count < height * width) {
                 ps.print(image[count / width][count % width] + " ");
-
-                // Apparement, ya un saut de ligne tout les 25 nombres
                 if (count % 25 == 0) {
                     ps.print("\n");
                 }
