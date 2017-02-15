@@ -292,6 +292,8 @@ public class SeamCarving {
         int width = image[0].length;
 
         int[][] res = image;
+
+        System.out.println("Avancement : ");
         for (int i = 0; i < nb_pixel; i++) {
             int[][] pix_interest = SeamCarving.interest(res);
             Graph g = SeamCarving.tograph(pix_interest);
@@ -299,7 +301,9 @@ public class SeamCarving {
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
             res = del_pixel_column(res, ppc);
+            System.out.printf("%d/%d\n", i+1, nb_pixel);
         }
+        System.out.println("OK");
 
         return res;
     }

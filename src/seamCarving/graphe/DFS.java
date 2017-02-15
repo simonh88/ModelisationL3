@@ -4,16 +4,33 @@ import java.util.Stack;
 
 class DFS {
 
+    /**
+     *
+     * @param g le graph
+     * @param s le sommet de départ
+     */
     public static void botched_dfs1(Graph g, int s) {
         Stack<Integer> stack = new Stack<Integer>();
         boolean visited[] = new boolean[g.vertices()];
+
+        // On push le premier sommet
         stack.push(s);
+        // ON dit qu'on l'a visité
         visited[s] = true;
+
+        // Tant que la pile n'est pas vide
         while (!stack.empty()) {
+
+            // On prend le sommet de la pile
             int u = stack.pop();
+
             System.out.println(u);
+
+            // Pour chaque arrête issues de ce sommet
             for (Edge e : g.next(u))
+                // Si on n'a pas visité le sommet où pointe cette arrête
                 if (!visited[e.to]) {
+                    // On visite ce sommet et on le push
                     visited[e.to] = true;
                     stack.push(e.to);
                 }
@@ -97,13 +114,14 @@ class DFS {
         g.addEdge(new Edge(4, 3, 1));
         g.addEdge(new Edge(3, 5, 1));
         g.addEdge(new Edge(5, 1, 1));
-        System.out.println("DFS1");
+        g.writeFile("testGraph.dot");
+        System.out.println("\n--- DFS1 ---\n");
         botched_dfs1(g, 0);
-        System.out.println("DFS2");
+        System.out.println("\n--- DFS2 ---\n");
         botched_dfs2(g, 0);
-        System.out.println("DFS3");
+        System.out.println("\n--- DFS3 ---\n");
         botched_dfs3(g, 0);
-        System.out.println("DFS4");
+        System.out.println("\n--- DFS4 ---\n");
         botched_dfs4(g, 0);
 
 
