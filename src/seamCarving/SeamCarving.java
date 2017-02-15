@@ -12,7 +12,7 @@ import java.util.*;
 public class SeamCarving {
     public static int[][] readpgm(String fn) {
         try {
-            InputStream f = ClassLoader.getSystemClassLoader().getResourceAsStream(fn);
+            InputStream f = new FileInputStream(fn);
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
             String magic = d.readLine();
             String line = d.readLine();
@@ -177,8 +177,6 @@ public class SeamCarving {
         return g;
     }
 
-
-
     //DFS utilisé par le tritipo
     //Ajoute le sommet à l'al une fois que tout ses "fils" sont visités
     static void dfs(Graph g, int u, boolean visite[], ArrayList<Integer> alChemin) {
@@ -216,7 +214,6 @@ public class SeamCarving {
         Integer[] dist = new Integer[g.vertices()];
         Arrays.fill(dist, Integer.MAX_VALUE - 100000);
         dist[order.get(0)] = 0;
-        //System.out.println("JE MET A ZERO : "+order.get(0));
         //Tableau qui contient les parents pendant le parcours
         Integer[] parents = new Integer[g.vertices()];
         //On rempli le tableau avec -1 (pas de sommet s'appelant -1)
@@ -230,16 +227,12 @@ public class SeamCarving {
         //On parcours order qui contient l'ordre du tri topo
         for (int i = 0; i < order.size(); i++) {
             point = order.get(i);
-            //System.out.println("Je m'interesse au point : "+order.get(i));
             //On recherche toute les arêtes qui mènent au point étudié et on recherche le coût minimal
             //On parcours les arêtes qui mènent à notre point
             for (Edge e : g.prev(point)) {
-                //System.out.println("Je regarde : "+e.getFrom()+" qui va vers : "+e.getTo());
                 int a = dist[e.getFrom()] + e.getCost();
-                //System.out.println("Valeur du point : "+dist[point] + " et valeur du + : "+a);
                 if (dist[point] >= dist[e.getFrom()] + e.getCost()) {//Si on entre c'est qu'on a trouvé plus petit
                     //On actualise nos tableaux
-                    //System.out.println("JE CHANGE");
                     dist[point] = dist[e.getFrom()] + e.getCost();
                     parents[point] = e.getFrom();
                 }
@@ -247,9 +240,6 @@ public class SeamCarving {
         }
         //Arraylist de réponses
         ArrayList<Integer> rep = new ArrayList<>(g.vertices());
-
-        //On ajoute le point d'arriver en premier
-        //rep.add(order.get(order.size() - 1));
 
         //Initialisation pour retrouver le CCM
         Integer parcours = parents[g.vertices() - 1];
