@@ -127,8 +127,11 @@ class DFS {
 
                 // Et on ajoute tous ces fils à la pile
                 for (Edge e : g.next(u))
-                    if (!visited[e.to])
+                    if (!visited[e.to]) {
+                        System.out.println(e.to);
+                        //Il y a deux fois 1 qui est affiché
                         stack.push(e.to);
+                    }
 
             }
         }
@@ -158,7 +161,7 @@ class DFS {
         visited[s] = true;
         //System.out.println(s);
         res.add(s);
-
+        int nbTours = 0;
         // Tant que la stack n'est pas vide
         while (!stack.empty()) {
             boolean end = true;
@@ -170,7 +173,8 @@ class DFS {
 
                 /* (a) */
             int u = stack.peek();
-            for (Edge e : g.next(u))
+            for (Edge e : g.next(u)) {
+                nbTours++;
                 if (!visited[e.to]) /* (b) */ {
                     visited[e.to] = true;
                     //System.out.println(e.to);
@@ -179,10 +183,11 @@ class DFS {
                     end = false;
                     break;
                 }
+            }
             if (end) /*(d)*/
-                stack.pop();
+                System.out.println("Pop de la fin : "+stack.pop());
         }
-
+        System.out.println("i nb tours : "+nbTours);
         // Affichage capacité et résultat
         System.out.println("Capacité : " + stack.capacity());
         System.out.print("\nRésultat : ");

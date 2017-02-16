@@ -28,5 +28,14 @@ Ordre des affichages : Au lieu d'aller au plus profond on sauvegarde sur la pile
 Ordre des affichages = ordre des visites = la fonction réalise un parcour en largeur
 
 
-* Pourquoi la pile est trop grande avec DFS 3 ? : 
+* Pourquoi la pile est trop grande avec DFS 3 ? :
+1
+2
+3
+5
+1
+4
+C'est le print de la pile quand on ajoute les enfants, 1 est ajouté 3 fois en tout (1 fois au tout début et deux fois encore là)
 * Pourquoi le temps d'éxécution est trop grand avec DFS 4 ? :
+i nb tours : 13
+Pour ici 6 noeuds, on passe au moins deux fois sur chacun pour vérifier qu'ils n'ont pas de fils pas visités
