@@ -203,6 +203,58 @@ public class SeamCarving {
     }
 
     /**
+     * Q2 : Parcour dans l'ordre suffixe avec DFS itératif et retourne un tri topo
+     * @param g le graphe à parcourir
+     * @param s le sommet de départ
+     * @return le tri topologique sous forme d'ArrayList
+     */
+    public static ArrayList<Integer> tritopo_it(Graph g, int s) {
+        ArrayList<Integer> suffixe = new ArrayList<>();
+        boolean visited[] = new boolean[g.vertices()];
+        Iterator<Edge> it ;
+        int u;
+
+        // (si c’est plus simple, on pourra
+        // utiliser deux piles (une pour u et une pour it) plutˆot qu’une pile avec des paires (u, it))
+        Stack<Integer> stack_u = new Stack<>();
+        Stack<Iterator<Edge>> stack_it = new Stack<>();
+
+        // Au d´epart, on ajoute dans la pile la paire (s, next(s))
+        stack_u.push(s);
+        stack_it.push(g.next(s).iterator());
+
+        // Tant que la pile n'est pas vide
+        while (!stack_u.empty()) {
+
+            //Recuperer (avec peek) la paire (u, it) en sommet de la pile.
+            u = stack_u.peek();
+            it = stack_it.peek();
+
+            // S’il reste un voisin de u non test´e (c’est `a dire si it.hasNext), alors soit v ce voisin.
+            if (it.hasNext()) {
+                int v = it.next().getTo();
+                // Si v est visite, on revient au d´ebut de la boucle
+                if (visited[v]) continue;
+                // Sinon, on ajoute v aux sommets visites, et on ajoute la paire (v, next(v)) en tete de la pile
+                visited[v] = true;
+                stack_u.push(v);
+                stack_it.push(g.next(v).iterator());
+            }
+            // — Sinon, on retire (u, it) de la pile. On a alors fini de visiter u (et on l’ajoute au tableau suffixe
+            // si on cherche a calculer l’ordre suffixe)
+            else {
+                suffixe.add(u);
+                stack_u.pop();
+                stack_it.pop();
+            }
+        }
+
+        // On prend l'inverse de l'orde suffixe
+        Collections.reverse(suffixe);
+        return suffixe;
+    }
+
+    /**
      * @param g     le graph à étudier
      * @param s     Le sommet d'ou part l'algo bellman
      * @param t     Le sommet d'arrivée

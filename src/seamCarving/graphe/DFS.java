@@ -1,5 +1,7 @@
 package seamCarving.graphe;
 
+import seamCarving.SeamCarving;
+
 import java.util.ArrayList;
 import java.util.Stack;
 
@@ -218,12 +220,37 @@ class DFS {
         botched_dfs3(g, 0);
         System.out.println("\n--- DFS4 ---\n");
         botched_dfs4(g, 0);
+    }
 
+    public static void testTriTopo() {
+        int n = 5;
+        int i, j;
+        GraphArrayList g = new GraphArrayList(6);
+        g.addEdge(new Edge(0, 1, 1));
+        g.addEdge(new Edge(0, 2, 1));
+        g.addEdge(new Edge(0, 3, 1));
+        g.addEdge(new Edge(1, 4, 1));
+        g.addEdge(new Edge(4, 3, 1));
+        g.addEdge(new Edge(3, 5, 1));
+        g.addEdge(new Edge(5, 1, 1));
+        ArrayList<Integer> tritopo_it = SeamCarving.tritopo_it(g, 0);
 
+        System.out.print("Tri topo itératif : ");
+        for (int t : tritopo_it) {
+            System.out.print(t + " ");
+        }
+        System.out.println("");
 
+        ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
+
+        System.out.print("Tri topo de base  : ");
+        for (int t : tritopo_it) {
+            System.out.print(t + " ");
+        }
+        System.out.println("");
     }
 
     public static void main(String[] args) {
-        testGraph();
+        testTriTopo();
     }
 }
