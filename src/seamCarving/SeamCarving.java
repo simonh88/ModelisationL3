@@ -198,13 +198,14 @@ public class SeamCarving {
         boolean[] visite = new boolean[n];
         ArrayList<Integer> alChemin = new ArrayList<>(n);
         //On lance dfs sur le premier sommet 0
-        dfs(g, g.vertices()-2, visite, alChemin);
+        dfs(g, g.vertices() - 2, visite, alChemin);
         Collections.reverse(alChemin);
         return alChemin;
     }
 
     /**
      * Q2 : Parcour dans l'ordre suffixe avec DFS itératif et retourne un tri topo
+     *
      * @param g le graphe à parcourir
      * @param s le sommet de départ
      * @return le tri topologique sous forme d'ArrayList
@@ -212,7 +213,7 @@ public class SeamCarving {
     public static ArrayList<Integer> tritopo_it(Graph g, int s) {
         ArrayList<Integer> suffixe = new ArrayList<>();
         boolean visited[] = new boolean[g.vertices()];
-        Iterator<Edge> it ;
+        Iterator<Edge> it;
         int u;
 
         // (si c’est plus simple, on pourra
@@ -301,7 +302,7 @@ public class SeamCarving {
             rep.add(parcours);
             parcours = parents[parcours];
         }
-        rep.remove(rep.size()-1);//On enleve le dernier point factice
+        rep.remove(rep.size() - 1);//On enleve le dernier point factice
         //On retourne le tableau pour avoir le bon sens du chemin
         Collections.reverse(rep);
 
@@ -326,8 +327,8 @@ public class SeamCarving {
             int j_res = 0;
             int j_src = 0;
             while (j_res < res[0].length) {
-                if (res_bellman.contains(i*img[0].length+j_src)) {
-                    int v = i*img.length+j_src;
+                if (res_bellman.contains(i * img[0].length + j_src)) {
+                    int v = i * img.length + j_src;
                     j_src++;
                 }
                 res[i][j_res] = img[i][j_src];
@@ -341,26 +342,25 @@ public class SeamCarving {
 
     public static int[][] reduce_width(String filename, int nb_pixel) {
         int[][] image = SeamCarving.readpgm(filename);
-        int height = image.length;
-        int width = image[0].length;
-
         int[][] res = image;
 
         System.out.println("Avancement : ");
         for (int i = 0; i < nb_pixel; i++) {
             int[][] pix_interest = SeamCarving.interest(res);
-            System.out.println("Taille p : "+pix_interest.length + "Taille p[0] : "+pix_interest[0].length);
+            System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
             //Graph g2 = SeamCarving.tograph(pix_interest);
+            int height = pix_interest[0].length;
+            int width = pix_interest.length;
 
-            Graph g = new GraphImplicit(pix_interest, pix_interest[0].length, pix_interest.length);
+            Graph g = new GraphImplicit(pix_interest, height, width);
             g.writeFile("res.dot");
             //g2.writeFile("res2.dot");
-            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g,height*width);
+            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
 
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
             res = del_pixel_column(res, ppc);
-            System.out.printf("%d/%d\n", i+1, nb_pixel);
+            System.out.printf("%d/%d\n", i + 1, nb_pixel);
         }
         System.out.println("OK");
 
