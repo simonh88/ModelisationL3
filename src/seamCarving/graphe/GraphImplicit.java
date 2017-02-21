@@ -19,7 +19,6 @@ public class GraphImplicit implements Graph {
         height = h;
         N = width * height + 2;
 
-
     }
 
 
@@ -31,29 +30,26 @@ public class GraphImplicit implements Graph {
 
         ArrayList<Edge> edges = new ArrayList();
         int ligne = v / width;
-        int col = (v - 1) % width;
-        if (v + width + 1 < N) {//Si on rentre on traite tout sauf la derniere ligne de sommets qui sont rattachés au dernier sommet
-            if (v == 0) {//Sommet tout en haut
-                for (int i = 0; i < width; i++) {
-                    edges.add(new Edge(v, v + width + i, 0));
-                }
-            } else if (v % width != 0) {//
-                edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
-                edges.add(new Edge(v, v + width, interest[ligne][col]));
-                edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
-            } else if ((v - 1) % width == 0) {//Bord gauche
-                edges.add(new Edge(v, v + width, interest[ligne][col]));
-                edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
-            } else {//Bord droit
-                edges.add(new Edge(v, v + width, interest[ligne][col]));
-                edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
+        int col = v % width;
+        if (v == width * height) {//Sommet tout en haut
+            System.out.println("PREMIER ");
+            for (int i = 0; i < width; i++) {
+                edges.add(new Edge(v, i, 0));
             }
-        } else {
-            if (v != width * height + 2) {//C'est que c'est dans la derniere ligne mais que c'est pas le sommet tout en bas
-                for(int i = 0; i<width; i++){
-                    edges.add(new Edge(v, width*height+1, interest[height-1][i]));
-                }
-            }
+        } else if (v >= ((height - 1) * width)) {//Derniere ligne
+            //On ignore le dernier noeud
+            System.out.println("col : "+col+" lig : "+ligne+" v : "+v);
+            if (v != width*height+1) edges.add(new Edge(v, width * height + 1, interest[ligne][col]));
+        } else if (col == 0) {//Bord gauche
+            edges.add(new Edge(v, v + width, interest[ligne][col]));
+            edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
+        } else if (col == width - 1) {//Bord droit
+            edges.add(new Edge(v, v + width, interest[ligne][col]));
+            edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
+        } else {//Cas ou on est pas sur les bords
+            edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
+            edges.add(new Edge(v, v + width, interest[ligne][col]));
+            edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
         }
 
         return edges;
@@ -62,7 +58,31 @@ public class GraphImplicit implements Graph {
 
     public Iterable<Edge> prev(int v) {
         ArrayList<Edge> edges = new ArrayList();
-        
+        int ligne = v / width;
+        int col = v % width;
+        if (v == width * height) {//Sommet tout en haut
+            //Pas de prev
+        } else if (v < width) {//Premiere ligne
+            edges.add(new Edge(width * height, v, 0));
+        } else if (col == 0) {//Bord gauche
+            edges.add(new Edge(v - width, v, interest[(v - width) / width][(v - width) % width]));
+            edges.add(new Edge(v - width + 1, v, interest[(v - width + 1) / width][(v - width + 1) % width]));
+        } else if (col == width - 2) {//Bord droit
+            edges.add(new Edge(v - width, v, interest[(v - width) / width][(v - width) % width]));
+            edges.add(new Edge(v - width - 1, v, interest[(v - width - 1) / width][(v - width - 1) / width]));
+        } else {//Cas ou on est pas sur les bords ou c'est le dernier noeud
+            if (v == width * height + 1) {//Dernier noeud
+                for (int i = 0; i < width; i++) {
+                    edges.add(new Edge(v - width + i, v, interest[(v - width-1 + i) / width][(v - width + 1) % width]));
+                }
+            } else {//Pas bord
+                edges.add(new Edge(v - width + 1, v, interest[(v - width + 1) / width][(v - width + 1) % width]));
+                edges.add(new Edge(v - width, v, interest[(v - width) / width][(v - width) % width]));
+                edges.add(new Edge(v - width - 1, v, interest[(v - width - 1) / width][(v - width - 1) / width]));
+            }
+        }
+
+
         return edges;
     }
 
