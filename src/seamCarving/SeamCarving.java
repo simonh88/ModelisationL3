@@ -3,6 +3,7 @@ package seamCarving;
 import seamCarving.graphe.Edge;
 import seamCarving.graphe.Graph;
 import seamCarving.graphe.GraphArrayList;
+import seamCarving.graphe.GraphImplicit;
 
 import java.util.Arrays;
 import java.util.ArrayList;
@@ -348,8 +349,11 @@ public class SeamCarving {
         System.out.println("Avancement : ");
         for (int i = 0; i < nb_pixel; i++) {
             int[][] pix_interest = SeamCarving.interest(res);
-            Graph g = SeamCarving.tograph(pix_interest);
-            ArrayList<Integer> tritopo = SeamCarving.tritopo(g);
+            System.out.println("Taille p : "+pix_interest.length + "Taille p[0] : "+pix_interest[0].length);
+
+            Graph g = new GraphImplicit(pix_interest, pix_interest[0].length, pix_interest.length);
+            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g,0);
+
 
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
             res = del_pixel_column(res, ppc);
