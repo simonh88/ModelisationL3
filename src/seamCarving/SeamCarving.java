@@ -353,8 +353,9 @@ public class SeamCarving {
             int width = pix_interest.length;
 
             Graph g = new GraphImplicit(pix_interest, height, width);
-            g.writeFile("res.dot");
+            //g.writeFile("res.dot");
             //g2.writeFile("res2.dot");
+            //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
             ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
 
 
