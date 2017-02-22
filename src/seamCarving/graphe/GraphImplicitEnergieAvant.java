@@ -9,11 +9,11 @@ public class GraphImplicitEnergieAvant implements Graph {
     int width;
     int height;
 
-    public GraphImplicitEnergieAvant(int[][] pixels, int w, int h) {
+    public GraphImplicitEnergieAvant(int[][] pixels) {
         this.pixels = pixels;
 
-        width = w;
-        height = h;
+        width = pixels[0].length;
+        height = pixels.length;
         N = width * height + 2;
 
     }
@@ -65,33 +65,45 @@ public class GraphImplicitEnergieAvant implements Graph {
 
     public Iterable<Edge> prev(int v) {
         ArrayList<Edge> edges = new ArrayList();
+
         int ligne = v / width;
         int col = v % width;
-        if (v == width * height) {//Sommet tout en haut
+
+        if (v == width * height) {
+
+            //Sommet tout en haut
             //Pas de prev
+
         } else if (v < width) {//Premiere ligne
-            //System.out.println("PREMIERE LIGNE " + v);
+
             edges.add(new Edge(width * height, v, 0));
+
         } else if (col == 0) {//Bord gauche
 
-            edges.add(new Edge(v - width, v, pixels[(v - width) / width][(v - width) % width]));
-            edges.add(new Edge(v - width + 1, v, pixels[(v - width + 1) / width][(v - width + 1) % width]));
+            edges.add(new Edge(v - width, v, pixels));
+            edges.add(new Edge(v - width + 1, v, pixels));
             
         } else if (col == width - 1) {//Bord droit
             
-            edges.add(new Edge(v - width, v, pixels[(v - width) / width][(v - width) % width]));
-            edges.add(new Edge(v - width - 1, v, pixels[(v - width - 1) / width][(v - width - 1) % width]));
+            edges.add(new Edge(v - width, v, pixels));
+            edges.add(new Edge(v - width - 1, v, pixels));
             
-        } else {//Cas ou on est pas sur les bords ou c'est le dernier noeud
+        } else {
+
+            //Cas ou on est pas sur les bords ou c'est le dernier noeud
             if (v == width * height + 1) {//Dernier noeud
                 for (int i = 0; i < width; i++) {
-                    edges.add(new Edge(v - width - 1 + i, v, pixels[(v - width - 1 + i) / width][(v - width + 1) % width]));
+                    edges.add(new Edge(v - width - 1 + i, v, pixels));
                 }
-            } else {//Pas bord
+            }
+
+            else  {
+
+                //Pas bord
                 //System.out.println("Milieu : " + v);
-                edges.add(new Edge(v - width + 1, v, pixels[(v - width + 1) / width][(v - width + 1) % width]));
-                edges.add(new Edge(v - width, v, pixels[(v - width) / width][(v - width) % width]));
-                edges.add(new Edge(v - width - 1, v, pixels[(v - width - 1) / width][(v - width - 1) % width]));
+                edges.add(new Edge(v - width + 1, v, pixels));
+                edges.add(new Edge(v - width, v, pixels));
+                edges.add(new Edge(v - width - 1, v, pixels));
             }
         }
         
@@ -103,9 +115,9 @@ public class GraphImplicitEnergieAvant implements Graph {
                        {8, 21, 29, 39},
                        {200, 60, 25, 0}};
 
-        GraphImplicitEnergieAvant giea = new GraphImplicitEnergieAvant(tab, tab[0].length, tab.length);
-        Iterable<Edge> nexts = giea.next(3);
-        for (Edge e : nexts) {
+        GraphImplicitEnergieAvant giea = new GraphImplicitEnergieAvant(tab);
+        Iterable<Edge> edges = giea.prev(5);
+        for (Edge e : edges) {
             System.out.println(e);
         }
 
