@@ -21,7 +21,6 @@ public class GraphImplicit implements Graph {
 
     }
 
-
     public int vertices() {
         return N;
     }
@@ -34,16 +33,19 @@ public class GraphImplicit implements Graph {
             for (int i = 0; i < width; i++) {
                 edges.add(new Edge(v, i, 0));
             }
-        } else if (v >= ((height - 1) * width)) {//Derniere ligne
+        } else if (v >= ((height - 1) * width)) {
+            //Derniere ligne
             //On ignore le dernier noeud
             if (v != width * height + 1) edges.add(new Edge(v, width * height + 1, interest[ligne][col]));
         } else if (col == 0) {//Bord gauche
             edges.add(new Edge(v, v + width, interest[ligne][col]));
             edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
-        } else if (col == width) {//Bord droit
+        } else if (col == width) {
+            //Bord droit
             edges.add(new Edge(v, v + width, interest[ligne][col]));
             edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
-        } else {//Cas ou on est pas sur les bords
+        } else {
+            //Cas ou on est pas sur les bords
             edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
             edges.add(new Edge(v, v + width, interest[ligne][col]));
             edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
