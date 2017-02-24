@@ -1,5 +1,7 @@
 package seamCarving;
 
+import java.io.PrintStream;
+
 public class PixelRGB extends Pixel {
 
     private int r;
@@ -28,5 +30,9 @@ public class PixelRGB extends Pixel {
 
     public int getB() {
         return b;
+    }
+
+    public void print(PrintStream ps ) {
+        ps.print(r + " " + g + " " + b + " ");
     }
 }

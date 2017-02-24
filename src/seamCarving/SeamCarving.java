@@ -1,10 +1,8 @@
 package seamCarving;
 
-import com.sun.deploy.util.ArrayUtil;
 import seamCarving.graphe.Edge;
 import seamCarving.graphe.Graph;
 import seamCarving.graphe.GraphArrayList;
-import seamCarving.graphe.GraphImplicit;
 import seamCarving.graphe.*;
 
 import java.util.Arrays;
@@ -19,7 +17,7 @@ public class SeamCarving {
      * @param fn
      * @return
      */
-    public static int[][] readpgm(String fn) {
+    public static PixelBN[][] readpgm(String fn) {
         try {
             InputStream f = new FileInputStream(fn);
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
@@ -34,11 +32,11 @@ public class SeamCarving {
             line = d.readLine();
             s = new Scanner(line);
             int maxVal = s.nextInt();
-            int[][] im = new int[height][width];
+            PixelBN[][] im = new PixelBN[height][width];
             s = new Scanner(d);
             int count = 0;
             while (count < height * width) {
-                im[count / width][count % width] = s.nextInt();
+                im[count / width][count % width] = new PixelBN(s.nextInt());
                 count++;
             }
             return im;
@@ -53,7 +51,7 @@ public class SeamCarving {
      * @param fn filename
      * @return Pixel[][]
      */
-    public static PixelRGB[][] readppm(String fn) {
+    private static PixelRGB[][] readppm(String fn) {
         try {
             InputStream f = new FileInputStream(fn);
             BufferedReader d = new BufferedReader(new InputStreamReader(f));
@@ -85,7 +83,7 @@ public class SeamCarving {
         }
     }
 
-    public static void writepgm(int[][] image, String filename) {
+    static void writepgm(Pixel[][] image, String filename) {
         try {
             int height = image.length;
             int width = image[0].length;
@@ -101,7 +99,8 @@ public class SeamCarving {
             ps.println("255");
 
             while (count < height * width) {
-                ps.print(image[count / width][count % width] + " ");
+                Pixel p = image[count / width][count % width];
+                p.print(ps);
                 if (count % 25 == 0) {
                     ps.print("\n");
                 }
@@ -120,7 +119,7 @@ public class SeamCarving {
      * @param image
      * @param filename
      */
-    public static void writeppm(PixelRGB[][] image, String filename) {
+    static void writeppm(Pixel[][] image, String filename) {
         try {
             int height = image.length;
             int width = image[0].length;
@@ -136,10 +135,9 @@ public class SeamCarving {
             ps.println("255");
 
             while (count < height * width) {
-                int r = image[count / width][count % width].getR();
-                int g = image[count / width][count % width].getG();
-                int b = image[count / width][count % width].getB();
-                ps.print(r + " " + g + " " + b + " ");
+                Pixel p =  image[count / width][count % width];
+                p.print(ps);
+
                 if (count % 25 == 0) {
                     ps.print("\n");
                 }
@@ -153,7 +151,7 @@ public class SeamCarving {
         }
     }
 
-    public static int[][] interest(int[][] img) {
+    public static int[][] interest(Pixel[][] img) {
         int height = img.length;
         int width = img[0].length;
         int[][] res = new int[height][width];
@@ -166,21 +164,21 @@ public class SeamCarving {
                 // Le pixel a deux voisins
                 if ((j - 1) >= 0 && (j + 1) < width) {
                     // Moyenne des voisins
-                    int average = (img[i][j - 1] + img[i][j + 1]) / 2;
+                    int average = (img[i][j - 1].getValue() + img[i][j + 1].getValue()) / 2;
                     // Valeur absolue de la différence entre la valeur du pixel et la moyenne de ses deux voisins
-                    interest_value = Math.abs(img[i][j] - average);
+                    interest_value = Math.abs(img[i][j].getValue() - average);
                 }
 
                 // Le pixel n'a qu'un voisin à droite
                 else if ((j - 1) < 0) {
                     // Valeur absolue de la différence entre la valeur du pixel et celle de son voisin droit
-                    interest_value = Math.abs(img[i][j] - img[i][j + 1]);
+                    interest_value = Math.abs(img[i][j].getValue() - img[i][j + 1].getValue());
                 }
 
                 // Le pixel n'a qu'un voisin à gauche
                 else {
                     // Valeur absolue de la différence entre la valeur du pixel et celle de son voisin gauche
-                    interest_value = Math.abs(img[i][j] - img[i][j - 1]);
+                    interest_value = Math.abs(img[i][j].getValue() - img[i][j - 1].getValue());
                 }
 
                 res[i][j] = interest_value;
@@ -398,10 +396,10 @@ public class SeamCarving {
      * @param res_bellman le plus court chemin
      * @return l'image avec une colonne de pixel en moi
      */
-    public static int[][] del_pixel_column(int[][] img, ArrayList<Integer> res_bellman) {
+    public static Pixel[][] del_pixel_column(Pixel[][] img, ArrayList<Integer> res_bellman) {
 
         // La nouvelle image a un pixel de moins en largeur
-        int[][] res = new int[img.length][img[0].length - 1];
+        Pixel[][] res = new Pixel[img.length][img[0].length - 1];
 
         // On itère sur les deux tableaux en même temps.
         // Pour itérer sur les lignes, on utilise deux variables différentes
@@ -423,90 +421,81 @@ public class SeamCarving {
         return res;
     }
 
-    public static int[][] reduce_width(String filename, int nb_pixel) {
-        int[][] image = SeamCarving.readpgm(filename);
-        int[][] res = image;
+    public static Pixel[][] reduce_width(String filename, int nb_pixel, boolean color) {
+        Pixel[][] image;
+        long t_start = System.currentTimeMillis();
 
-        System.out.println("Avancement : ");
-        for (int i = 0; i < nb_pixel; i++) {
-            int[][] pix_interest = SeamCarving.interest(res);
-            //System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
-            //Graph g2 = SeamCarving.tograph(pix_interest);
-            int height = res[0].length;
-            int width = res.length;
-
-
-            Graph g = new GraphImplicit(pix_interest, height, width);
-            g.writeFile("res.dot");
-            //g2.writeFile("res2.dot");
-            //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
-            //Graph g = new GraphImplicitEnergieAvant(res);
-            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
-
-
-            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
-            res = del_pixel_column(res, ppc);
-            System.out.printf("%d/%d\n", i + 1, nb_pixel);
+        if (color) {
+            image = readppm(filename);
+        } else {
+            image = readpgm(filename);
         }
-        System.out.println("OK");
-
-        return res;
-    }
-
-
-    public static int[][] reduce_width_line(String filename, int nb_pixel) {
-        int[][] image = SeamCarving.readpgm(filename);
-        int[][] res = image;
-        System.out.println("h : "+res[0].length +"w : "+res.length);
-        res = reverse_img(res);
-
+        Pixel[][] res = image;
 
         System.out.println("Avancement : ");
-        for (int i = 0; i < nb_pixel; i++) {
-            //int[][] pix_interest = SeamCarving.interest(res);
-            //System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
-            //Graph g2 = SeamCarving.tograph(pix_interest);
-            int height = res[0].length;
-            System.out.println("AFTER h : "+res[0].length +"w : "+res.length);
+        System.out.println("________________________________________");
 
+        for (int i = 0; i < nb_pixel; i++) {
+            int height = res[0].length;
             int width = res.length;
 
 
-            //Graph g = new GraphImplicit(pix_interest, height, width);
-            //g.writeFile("res.dot");
-            //g2.writeFile("res2.dot");
-            //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
             Graph g = new GraphImplicitEnergieAvant(res);
             ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
-
-
             ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
             res = del_pixel_column(res, ppc);
-            System.out.printf("%d/%d\n", i + 1, nb_pixel);
+            // Marche seulement dans une vrai console
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
+            System.out.printf("%d/%d", i+1, nb_pixel);
         }
-        System.out.println("OK");
-        res = reverse_img(res);
+        long final_time = (System.currentTimeMillis() - t_start) / 1000;
+        System.out.println("\nFait en " + final_time + "s");
+
         return res;
     }
 
-    public static int[][] reverse_img(int[][] img) {
-        int[][] pivot = new int[img[0].length][];
+
+    public static Pixel[][] reduce_width_line(String filename, int nb_pixel, boolean color) {
+        Pixel[][] image ;
+        if (color) {
+            image = readppm(filename);
+        } else {
+            image = readpgm(filename);
+        }
+        Pixel[][] res = image;
+        res = reverse_img(res);
+        long t_start = System.currentTimeMillis();
+
+
+        System.out.println("Avancement : ");
+        System.out.println("________________________________________");
+
+        for (int i = 0; i < nb_pixel; i++) {
+            int height = res[0].length;
+            int width = res.length;
+            Graph g = new GraphImplicitEnergieAvant(res);
+            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
+            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
+            res = del_pixel_column(res, ppc);
+            System.out.print("\b\b\b\b\b\b\b\b\b\b\b\b");
+            System.out.printf("%d/%d", i+1, nb_pixel);
+        }
+        res = reverse_img(res);
+        long final_time = (System.currentTimeMillis() - t_start) / 1000;
+        System.out.println("\nFait en " + final_time + "s");
+        return res;
+    }
+
+    private static Pixel[][] reverse_img(Pixel[][] img) {
+        Pixel[][] pivot = new Pixel[img[0].length][];
         for (int row = 0; row < img[0].length; row++)
-            pivot[row] = new int[img.length];
+            pivot[row] = new Pixel[img.length];
 
         for (int row = 0; row < img.length; row++)
             for (int col = 0; col < img[row].length; col++)
                 pivot[col][row] = img[row][col];
 
         return pivot;
-    }
-    /**
-     * Test lecture écriture ppm
-     * @param args
-     */
-    public static void main(String[] args) {
-        PixelRGB[][] img = readppm("res/chateau.ppm");
-        writeppm(img, "res/testwriteppm.ppm");
     }
 
 }

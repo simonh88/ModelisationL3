@@ -1,6 +1,8 @@
 package seamCarving.graphe;
 
 
+import seamCarving.Pixel;
+
 public class Edge
 {
    int from;
@@ -12,7 +14,7 @@ public class Edge
 		this.cost = cost;
    }
 
-   public Edge(int x, int y, int[][] pixels) {
+   public Edge(int x, int y, Pixel[][] pixels) {
        this.from = x;
        this.to = y;
        setupEnergieAvant(pixels);
@@ -46,7 +48,7 @@ public class Edge
    	return "to: " + to + " | from: " + from + " | cost: " + cost;
 	}
 
-	public void setupEnergieAvant(int[][] pixels) {
+	public void setupEnergieAvant(Pixel[][] pixels) {
 
 
    		int height = pixels.length;
@@ -94,7 +96,7 @@ public class Edge
 
 	}
 
-	private int valEA(int i, int j, int[][] pixels) {
+	private int valEA(int i, int j, Pixel[][] pixels) {
         int height = pixels.length;
         int width = pixels[0].length;
 
@@ -103,6 +105,6 @@ public class Edge
         if (i < 0 || i >= width ) return 0;
         if (j < 0 || j >= height ) return 0;
 
-        return pixels[j][i];
+        return pixels[j][i].getValue();
     }
 }

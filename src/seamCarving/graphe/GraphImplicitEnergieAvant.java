@@ -1,15 +1,18 @@
 package seamCarving.graphe;
 
+import seamCarving.Pixel;
+import seamCarving.SeamCarving;
+
 import java.util.ArrayList;
 
 public class GraphImplicitEnergieAvant implements Graph {
 
     int N = 0;
-    int[][] pixels;
+    Pixel[][] pixels;
     int width;
     int height;
 
-    public GraphImplicitEnergieAvant(int[][] pixels) {
+    public GraphImplicitEnergieAvant(Pixel[][] pixels) {
         this.pixels = pixels;
 
         width = pixels[0].length;
@@ -108,21 +111,6 @@ public class GraphImplicitEnergieAvant implements Graph {
         }
         
         return edges;
-    }
-
-    public static void main(String[] args) {
-        int[][] tab = {{3, 11, 24, 39},
-                       {8, 21, 29, 39},
-                       {200, 60, 25, 0}};
-
-        GraphImplicitEnergieAvant giea = new GraphImplicitEnergieAvant(tab);
-        Iterable<Edge> edges = giea.prev(5);
-        for (Edge e : edges) {
-            System.out.println(e);
-        }
-
-        // Le graphe obtenue est le même que celui donné dans le sujet -> OK
-        giea.writeFile("testEnergieAvant.dot");
     }
 
 }
