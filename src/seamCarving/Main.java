@@ -8,6 +8,7 @@ public class Main {
            System.exit(0);
        }
         int[][] res = SeamCarving.reduce_width(argv[0], Integer.parseInt(argv[2]));
+        //res = SeamCarving.reduce_width(argv[0], Integer.parseInt(argv[2]));
         SeamCarving.writepgm(res, argv[1]);
 
     }

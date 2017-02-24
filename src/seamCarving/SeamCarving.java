@@ -1,5 +1,6 @@
 package seamCarving;
 
+import com.sun.deploy.util.ArrayUtil;
 import seamCarving.graphe.Edge;
 import seamCarving.graphe.Graph;
 import seamCarving.graphe.GraphArrayList;
@@ -353,7 +354,7 @@ public class SeamCarving {
             int width = pix_interest.length;
 
             Graph g = new GraphImplicit(pix_interest, height, width);
-            //g.writeFile("res.dot");
+            g.writeFile("res.dot");
             //g2.writeFile("res2.dot");
             //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
             ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
@@ -366,6 +367,46 @@ public class SeamCarving {
         System.out.println("OK");
 
         return res;
+    }
+
+    public static int[][] reduce_width_line(String filename, int nb_pixel) {
+        int[][] image = SeamCarving.readpgm(filename);
+        int[][] res = image;
+
+        System.out.println("Avancement : ");
+        for (int i = 0; i < nb_pixel; i++) {
+            int[][] pix_interest = SeamCarving.interest(res);
+            pix_interest = reverse_pix_interest(pix_interest);
+            System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
+            //Graph g2 = SeamCarving.tograph(pix_interest);
+            int height = pix_interest[0].length;
+            int width = pix_interest.length;
+
+            Graph g = new GraphImplicit(pix_interest, height, width);
+            g.writeFile("res2.dot");
+            //g2.writeFile("res2.dot");
+            //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
+            ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
+
+
+            ArrayList<Integer> ppc = SeamCarving.Bellman(g, height * width, height * width + 1, tritopo);
+            res = del_pixel_column(res, ppc);
+            System.out.printf("%d/%d\n", i + 1, nb_pixel);
+        }
+        System.out.println("OK");
+
+        return res;
+    }
+
+    public static int[][] reverse_pix_interest(int[][] pix_interest){
+        for(int j = 0; j < pix_interest.length; j++){
+            for(int i = 0; i < pix_interest[j].length / 2; i++) {
+                int temp = pix_interest[j][i];
+                pix_interest[j][i] = pix_interest[j][pix_interest[j].length - i - 1];
+                pix_interest[j][pix_interest[j].length - i - 1] = temp;
+            }
+        }
+        return pix_interest;
     }
 
 }
