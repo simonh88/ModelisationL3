@@ -457,20 +457,26 @@ public class SeamCarving {
     public static int[][] reduce_width_line(String filename, int nb_pixel) {
         int[][] image = SeamCarving.readpgm(filename);
         int[][] res = image;
+        System.out.println("h : "+res[0].length +"w : "+res.length);
+        res = reverse_img(res);
+
 
         System.out.println("Avancement : ");
         for (int i = 0; i < nb_pixel; i++) {
-            int[][] pix_interest = SeamCarving.interest(res);
-            pix_interest = reverse_pix_interest(pix_interest);
-            System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
+            //int[][] pix_interest = SeamCarving.interest(res);
+            //System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
             //Graph g2 = SeamCarving.tograph(pix_interest);
-            int height = pix_interest[0].length;
-            int width = pix_interest.length;
+            int height = res[0].length;
+            System.out.println("AFTER h : "+res[0].length +"w : "+res.length);
 
-            Graph g = new GraphImplicit(pix_interest, height, width);
-            g.writeFile("res2.dot");
+            int width = res.length;
+
+
+            //Graph g = new GraphImplicit(pix_interest, height, width);
+            //g.writeFile("res.dot");
             //g2.writeFile("res2.dot");
             //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
+            Graph g = new GraphImplicitEnergieAvant(res);
             ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
 
 
@@ -479,19 +485,20 @@ public class SeamCarving {
             System.out.printf("%d/%d\n", i + 1, nb_pixel);
         }
         System.out.println("OK");
-
+        res = reverse_img(res);
         return res;
     }
 
-    public static int[][] reverse_pix_interest(int[][] pix_interest) {
-        for (int j = 0; j < pix_interest.length; j++) {
-            for (int i = 0; i < pix_interest[j].length / 2; i++) {
-                int temp = pix_interest[j][i];
-                pix_interest[j][i] = pix_interest[j][pix_interest[j].length - i - 1];
-                pix_interest[j][pix_interest[j].length - i - 1] = temp;
-            }
-        }
-        return pix_interest;
+    public static int[][] reverse_img(int[][] img) {
+        int[][] pivot = new int[img[0].length][];
+        for (int row = 0; row < img[0].length; row++)
+            pivot[row] = new int[img.length];
+
+        for (int row = 0; row < img.length; row++)
+            for (int col = 0; col < img[row].length; col++)
+                pivot[col][row] = img[row][col];
+
+        return pivot;
     }
     /**
      * Test lecture écriture ppm
