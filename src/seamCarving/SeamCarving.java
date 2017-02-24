@@ -429,18 +429,18 @@ public class SeamCarving {
 
         System.out.println("Avancement : ");
         for (int i = 0; i < nb_pixel; i++) {
-            //int[][] pix_interest = SeamCarving.interest(res);
+            int[][] pix_interest = SeamCarving.interest(res);
             //System.out.println("Taille p : " + pix_interest.length + "Taille p[0] : " + pix_interest[0].length);
             //Graph g2 = SeamCarving.tograph(pix_interest);
             int height = res[0].length;
             int width = res.length;
 
 
-            //Graph g = new GraphImplicit(pix_interest, height, width);
-            //g.writeFile("res.dot");
+            Graph g = new GraphImplicit(pix_interest, height, width);
+            g.writeFile("res.dot");
             //g2.writeFile("res2.dot");
             //ArrayList<Integer> tritopo2 = SeamCarving.tritopo(g);
-            Graph g = new GraphImplicitEnergieAvant(res);
+            //Graph g = new GraphImplicitEnergieAvant(res);
             ArrayList<Integer> tritopo = SeamCarving.tritopo_it(g, height * width);
 
 

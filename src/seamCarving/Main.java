@@ -9,7 +9,7 @@ public class Main {
        }
 
         
-        int[][] res = SeamCarving.reduce_width_line(argv[0], Integer.parseInt(argv[2]));
+        int[][] res = SeamCarving.reduce_width(argv[0], Integer.parseInt(argv[2]));
         //res = SeamCarving.reduce_width(argv[0], Integer.parseInt(argv[2]));
         SeamCarving.writepgm(res, argv[1]);
 

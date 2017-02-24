@@ -40,7 +40,7 @@ public class GraphImplicit implements Graph {
         } else if (col == 0) {//Bord gauche
             edges.add(new Edge(v, v + width, interest[ligne][col]));
             edges.add(new Edge(v, v + width + 1, interest[ligne][col]));
-        } else if (col == width) {
+        } else if (col == width - 1) {
             //Bord droit
             edges.add(new Edge(v, v + width, interest[ligne][col]));
             edges.add(new Edge(v, v + width - 1, interest[ligne][col]));
