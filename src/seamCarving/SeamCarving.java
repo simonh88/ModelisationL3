@@ -8,6 +8,12 @@ import java.io.*;
 import java.util.*;
 
 public class SeamCarving {
+
+    /**
+     * Lecture des ppm p2
+     * @param fn
+     * @return
+     */
     public static int[][] readpgm(String fn) {
         try {
             InputStream f = new FileInputStream(fn);
@@ -37,6 +43,43 @@ public class SeamCarving {
         }
     }
 
+    /**
+     * Lecture des ppm P3
+     * @param fn filename
+     * @return Pixel[][]
+     */
+    public static PixelRGB[][] readppm(String fn) {
+        try {
+            InputStream f = new FileInputStream(fn);
+            BufferedReader d = new BufferedReader(new InputStreamReader(f));
+            String magic = d.readLine();
+            String line = d.readLine();
+            while (line.startsWith("#")) {
+                line = d.readLine();
+            }
+            Scanner s = new Scanner(line);
+            int width = s.nextInt();
+            int height = s.nextInt();
+            line = d.readLine();
+            s = new Scanner(line);
+            int maxVal = s.nextInt();
+            PixelRGB[][] im = new PixelRGB[height][width];
+            s = new Scanner(d);
+            int count = 0;
+            while (count < height * width) {
+                int r = s.nextInt();
+                int g = s.nextInt();
+                int b = s.nextInt();
+                im[count / width][count % width] = new PixelRGB(r, g, b);
+                count++;
+            }
+            return im;
+        } catch (Throwable t) {
+            t.printStackTrace(System.err);
+            return null;
+        }
+    }
+
     public static void writepgm(int[][] image, String filename) {
         try {
             int height = image.length;
@@ -54,6 +97,44 @@ public class SeamCarving {
 
             while (count < height * width) {
                 ps.print(image[count / width][count % width] + " ");
+                if (count % 25 == 0) {
+                    ps.print("\n");
+                }
+                count++;
+            }
+
+            ps.close();
+
+        } catch (Throwable t) {
+            t.printStackTrace(System.err);
+        }
+    }
+
+    /**
+     * Ecriture des ppm p3
+     * @param image
+     * @param filename
+     */
+    public static void writeppm(PixelRGB[][] image, String filename) {
+        try {
+            int height = image.length;
+            int width = image[0].length;
+            int count = 0;
+
+            OutputStream os = new FileOutputStream(filename);
+            PrintStream ps = new PrintStream(os);
+            // La première ligne -> magic P2
+            ps.println("P3");
+            // La deuxième -> largeur et hauteur
+            ps.println(width + " " + height);
+            // la troisème -> 255 ?
+            ps.println("255");
+
+            while (count < height * width) {
+                int r = image[count / width][count % width].getR();
+                int g = image[count / width][count % width].getG();
+                int b = image[count / width][count % width].getB();
+                ps.print(r + " " + g + " " + b + " ");
                 if (count % 25 == 0) {
                     ps.print("\n");
                 }
@@ -361,6 +442,15 @@ public class SeamCarving {
         System.out.println("OK");
 
         return res;
+    }
+
+    /**
+     * Test lecture écriture ppm
+     * @param args
+     */
+    public static void main(String[] args) {
+        PixelRGB[][] img = readppm("res/chateau.ppm");
+        writeppm(img, "res/testwriteppm.ppm");
     }
 
 }
